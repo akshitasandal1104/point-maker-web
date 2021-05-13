@@ -1,0 +1,12 @@
+{{yield}}
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Title: {{ @title }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">ID: {{ @id }}</h6>
+        <div class="d-flex justify-content-end">
+            <button class="btn btn-outline-secondary mr-2" {{action "edit" @api}}>Edit</button>
+            <button class="btn btn-danger" {{action "delete" @api}}>Delete</button>
+        </div>
+    </div>
+</div>

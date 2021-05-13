@@ -69,5 +69,8 @@
   },
   "ember": {
     "edition": "octane"
+  },
+  "dependencies": {
+    "mapbox-gl": "^2.2.0"
   }
 }

@@ -1,0 +1,15 @@
+{{page-title "Home"}}
+
+<div id='map' class="map-box mb-5" {{ did-insert this.renderMap }}></div>
+
+<div class="container-fluid">
+    <div class="row">
+        {{#each @model as |entry|}}
+        <div class="col-md-3 mb-3">
+            <BasicCard @title="{{entry.title}}" @id="{{entry.id}}" />
+        </div>
+        {{/each}}
+    </div>
+</div>
+
+{{outlet}}

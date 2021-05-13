@@ -1,2 +1,8 @@
-
 @import "ember-bootstrap/bootstrap";
+@import 'mapbox-gl/dist/mapbox-gl.css';
+
+
+.map-box {
+    width: auto;
+    height: 500px;
+}
