@@ -28,7 +28,12 @@ module.exports = function (environment) {
 				zoom: 3,
 				center: [80.5, 40]
 			}
+		},
+		API: {
+			baseUrl: 'https://glacial-scrubland-15511.herokuapp.com/',
+			apiVersion: 'api/v1/'
 		}
+
 	};
 
 	if (environment === 'development') {

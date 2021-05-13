@@ -1,4 +1,7 @@
 import Route from '@ember/routing/route';
+import config from '../config/environment';
+import { APIROUTES } from '../routes/api-endpoints';
+import axios from 'axios';
 
 // export default class HomeRoute extends Route {
 export default Ember.Route.extend({
@@ -8,10 +11,14 @@ export default Ember.Route.extend({
 	// },
 
 	async model() {
-		const response = await fetch('https://glacial-scrubland-15511.herokuapp.com/api/v1/points');
-		const data = await response.json();
-		this.set('mapData', data);
-		return data;
+		const url = config.API.baseUrl + config.API.apiVersion + APIROUTES.points;
+		let response = await axios.get(url).then((res) => {
+			if (res.status === 200) {
+				this.set('mapData', res.data);
+				return res.data;
+			}
+		}).catch(err => console.log(err));
+		return response;
 	},
 
 	setupController: function(controller, model) {

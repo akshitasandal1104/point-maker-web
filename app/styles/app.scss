@@ -1,5 +1,7 @@
 @import "ember-bootstrap/bootstrap";
 @import 'mapbox-gl/dist/mapbox-gl.css';
+@import "ember-modal-dialog/ember-modal-structure";
+@import "ember-modal-dialog/ember-modal-appearance";
 
 
 .map-box {

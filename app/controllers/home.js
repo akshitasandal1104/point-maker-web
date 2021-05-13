@@ -1,49 +1,88 @@
 import Controller from '@ember/controller';
 import mapboxgl from 'mapbox-gl';
 import config from '../config/environment';
+import { APIROUTES } from '../routes/api-endpoints';
+import axios from 'axios';
 
-// export default class HomeController extends Controller {
-export default Ember.Route.extend({
-    t: 10,
+export default class HomeController extends Controller {
+    // export default Ember.Controller.extend({
+    selectedCordinates = null;
+    isShowingModal = false;
 
-    init: function() {
-        // this._super();
-        // setTimeout(() => {
-        //     console.log(this.get('mapData'));
-        // }, 3000);
-    },
+    constructor() {
+        super();
+        let selectedCordinates = localStorage.getItem('selectedCordinates');
+        if (selectedCordinates) {
+            localStorage.removeItem('selectedCordinates');
+        }
+    }
 
-    // model: function() {
-    //     var entries = this.get('mapData');
-    //     console.log(entries)
-    // },
+    actions = {
+        delete(item) {
+            console.log(item)
+        },
+
+        toggleModal(flag = '', item = {}) {
+            this.toggleProperty('isShowingModal');
+            if (flag === 'add') {
+                setTimeout(() => {
+                    let selectedCordinates = localStorage.getItem('selectedCordinates');
+                    if (selectedCordinates) {
+                        selectedCordinates = JSON.parse(selectedCordinates);
+                        console.log(selectedCordinates);
+                    }
+                }, 500);
+            } else if (flag === 'edit') {
+                console.log(item)
+                this.titleValue = item.title;
+            }
+        },
+
+        add() {
+            let selectedCordinates = JSON.parse(localStorage.getItem('selectedCordinates'));
+            const coordinates = { "type": 'Point', "coordinates": [selectedCordinates.lng, selectedCordinates.lat] };
+            const payload = {
+                "point": {
+                    "title": this.titleValue,
+                    "coordinates": JSON.stringify(coordinates)
+                }
+            }
+            // console.log(payload);
+            // return
+            axios({
+                method: 'post',
+                url: config.API.baseUrl + config.API.apiVersion + APIROUTES.points,
+                data: payload
+            }).then(res => {
+                console.log(res)
+            }).catch(err => console.log(err));
+        }
+    }
 
     async renderMap() {
-        const response = await fetch('https://glacial-scrubland-15511.herokuapp.com/api/v1/points');
-		let data = await response.json();
-		mapboxgl.accessToken = config.mapbox.accessToken;
-		const map = new mapboxgl.Map({
-			container: 'map', // container ID
-			style: config.mapbox.map.style, // style URL
-			center: config.mapbox.map.center, // starting position [lng, lat]
-			zoom: config.mapbox.map.zoom // starting zoom
-		});
-		// map.addControl(
-		// 	new MapboxGeocoder({
-		// 		accessToken: mapboxgl.accessToken,
-		// 		mapboxgl: mapboxgl
-		// 	})
-		// );
+        const url = config.API.baseUrl + config.API.apiVersion + APIROUTES.points;
+        axios.get(url).then((res) => {
+            if (res.status === 200) {
+                const points = [...res.data];
+                mapboxgl.accessToken = config.mapbox.accessToken;
+                const map = new mapboxgl.Map({
+                    container: 'map', // container ID
+                    style: config.mapbox.map.style, // style URL
+                    center: config.mapbox.map.center, // starting position [lng, lat]
+                    zoom: config.mapbox.map.zoom // starting zoom
+                });
 
-		map.on('click', function (e) {
-			this.selectedCordinates = e.lngLat;
-			console.log(this.payload);
-		});
-		for (let i = 0; i < data.length; i++) {
-			let marker = new mapboxgl.Marker()
-				.setLngLat(data[i].coordinates)
-				// .setPopup(new mapboxgl.Popup().setHTML("<h1>Hello World!</h1>"))
-				.addTo(map);
-		}
-	}
-});
+                map.on('click', function (e) {
+                    this.selectedCordinates = e.lngLat;
+                    localStorage.setItem('selectedCordinates', JSON.stringify(this.selectedCordinates));
+                });
+                for (let i = 0; i < points.length; i++) {
+                    let marker = new mapboxgl.Marker()
+                        .setLngLat(points[i].coordinates)
+                        // .setPopup(new mapboxgl.Popup().setHTML("<div>" + points[i].title + "</div>"))
+                        .addTo(map);
+                }
+            }
+        }).catch(err => console.log(err));
+    }
+}

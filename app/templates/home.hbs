@@ -1,15 +1,43 @@
 {{page-title "Home"}}
 
-<div id='map' class="map-box mb-5" {{ did-insert this.renderMap }}></div>
+<div id='map' class="map-box mb-5" {{ did-insert this.renderMap }} {{action "toggleModal" "add" }}></div>
+
+{{!-- <div {{action "render" }}>Re-render</div> --}}
 
 <div class="container-fluid">
     <div class="row">
         {{#each @model as |entry|}}
         <div class="col-md-3 mb-3">
-            <BasicCard @title="{{entry.title}}" @id="{{entry.id}}" />
+            {{!-- <BasicCard @title="{{entry.title}}" @id="{{entry.id}}" /> --}}
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Title: {{ entry.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">ID: {{ entry.id }}</h6>
+                    <div class="d-flex justify-content-end">
+                        <button class="btn btn-outline-secondary mr-2" {{action "toggleModal" "edit" entry}}>Edit</button>
+                        <button class="btn btn-danger" {{action "delete" entry}}>Delete</button>
+                    </div>
+                </div>
+            </div>
         </div>
         {{/each}}
     </div>
 </div>
+
+{{#if isShowingModal}}
+{{#modal-dialog onClose=(action "toggleModal") targetAttachment="center" translucentOverlay=true}}
+<div>
+    <form>
+        <div class="form-group">
+            <label>Title</label>
+            {{!-- <input type="text" class="form-control" placeholder="Enter title" value="{{this.titleValue}}"> --}}
+            <Input class="form-control" @type="text" @value={{this.titleValue}} />
+        </div>
+        {{!-- {{this.titleValue}} --}}
+        <button class="btn btn-primary" {{action "add" }}>Submit</button>
+    </form>
+</div>
+{{/modal-dialog}}
+{{/if}}
 
 {{outlet}}
