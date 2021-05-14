@@ -32,9 +32,12 @@
             <label>Title</label>
             {{!-- <input type="text" class="form-control" placeholder="Enter title" value="{{this.titleValue}}"> --}}
             <Input class="form-control" @type="text" @value={{this.titleValue}} />
+            {{#if titleErr}}
+                <small class="text-danger">*Please enter title</small>
+            {{/if}}
         </div>
         {{!-- {{this.titleValue}} --}}
-        <button class="btn btn-primary" {{action "add" }}>Submit</button>
+        <button class="btn btn-primary" {{action "submit" }}>Submit</button>
     </form>
 </div>
 {{/modal-dialog}}

@@ -8,6 +8,9 @@ export default class HomeController extends Controller {
     // export default Ember.Controller.extend({
     selectedCordinates = null;
     isShowingModal = false;
+    titleErr = false;
+    flag = '';
+    selectedItem = {};
 
     constructor() {
         super();
@@ -19,42 +22,75 @@ export default class HomeController extends Controller {
 
     actions = {
         delete(item) {
-            console.log(item)
+            const url = config.API.baseUrl + config.API.apiVersion + APIROUTES.points + '/' + item.id;
+            axios({
+                method: 'delete',
+                url: url,
+            }).then(res => {
+                console.log(res)
+                if (res.status === 200) {
+                    window.location.reload();
+                }
+            }).catch(err => console.log(err));
         },
 
         toggleModal(flag = '', item = {}) {
             this.toggleProperty('isShowingModal');
             if (flag === 'add') {
+                this.flag = flag;
                 setTimeout(() => {
                     let selectedCordinates = localStorage.getItem('selectedCordinates');
                     if (selectedCordinates) {
                         selectedCordinates = JSON.parse(selectedCordinates);
-                        console.log(selectedCordinates);
                     }
-                }, 500);
+                }, 250);
             } else if (flag === 'edit') {
-                console.log(item)
+                this.flag = flag;
                 this.titleValue = item.title;
+                this.selectedItem = item;
             }
         },
 
-        add() {
-            let selectedCordinates = JSON.parse(localStorage.getItem('selectedCordinates'));
-            const coordinates = { "type": 'Point', "coordinates": [selectedCordinates.lng, selectedCordinates.lat] };
-            const payload = {
-                "point": {
-                    "title": this.titleValue,
-                    "coordinates": JSON.stringify(coordinates)
-                }
+        submit() {
+            console.log(this.flag)
+            if (!this.titleValue) {
+                this.toggleProperty('titleErr');
+                this.titleErr = true;
+                return;
             }
-            // console.log(payload);
-            // return
+            let selectedCordinates = JSON.parse(localStorage.getItem('selectedCordinates'));
+            let payload;
+            let method;
+            let url;
+            debugger
+            if (this.flag === 'add') {
+                const coordinates = { "type": 'Point', "coordinates": [selectedCordinates.lng, selectedCordinates.lat] };
+                payload = {
+                    "point": {
+                        "title": this.titleValue,
+                        "coordinates": JSON.stringify(coordinates)
+                    }
+                };
+                method = 'post';
+                url = config.API.baseUrl + config.API.apiVersion + APIROUTES.points;
+            } else {
+                payload = {
+                    "point": {
+                        "title": this.titleValue,
+                    }
+                };
+                method = 'patch';
+                url = config.API.baseUrl + config.API.apiVersion + APIROUTES.points + '/' + this.selectedItem.id;
+            }
             axios({
-                method: 'post',
-                url: config.API.baseUrl + config.API.apiVersion + APIROUTES.points,
+                method: method,
+                url: url,
                 data: payload
             }).then(res => {
-                console.log(res)
+                if (res.status === 201 || res.status === 200) {
+                    this.toggleProperty('isShowingModal');
+                    window.location.reload();
+                }
             }).catch(err => console.log(err));
         }
     }
