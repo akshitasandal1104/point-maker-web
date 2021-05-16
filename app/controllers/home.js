@@ -4,7 +4,6 @@ import config from '../config/environment';
 import { APIROUTES } from '../routes/api-endpoints';
 import axios from 'axios';
 
-
 export default class HomeController extends Controller {
     // export default Ember.Controller.extend({
     selectedCordinates = null;
