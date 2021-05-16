@@ -21,7 +21,7 @@
     "start": "ember serve",
     "test": "npm-run-all lint test:*",
     "test:ember": "ember test",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm install serve --s"
   },
   "devDependencies": {
     "@ember/optional-features": "^2.0.0",
