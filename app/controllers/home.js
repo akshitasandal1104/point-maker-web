@@ -52,7 +52,6 @@ export default class HomeController extends Controller {
         },
 
         submit() {
-            console.log(this.flag)
             if (!this.titleValue) {
                 this.toggleProperty('titleErr');
                 this.titleErr = true;

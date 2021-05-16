@@ -10,11 +10,11 @@ export default Ember.Route.extend({
 	// 	return this.get('mapData');
 	// },
 
-	async model() {
+	model() {
 		const url = config.API.baseUrl + config.API.apiVersion + APIROUTES.points;
-		let response = await axios.get(url).then((res) => {
+		let response = axios.get(url).then((res) => {
 			if (res.status === 200) {
-				this.set('mapData', res.data);
+				this.set('model', res.data);
 				return res.data;
 			}
 		}).catch(err => console.log(err));
@@ -23,7 +23,7 @@ export default Ember.Route.extend({
 
 	setupController: function(controller, model) {
 		this._super(controller, model);
-		controller.set('mapData', model);
+		controller.set('model', model);
 	},
 
 	detectController: function () {}.observes('setupController').on('init')
