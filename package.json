@@ -74,7 +74,11 @@
   "ember": {
     "edition": "octane"
   },
+  "browserslist": [
+    ">0.2%, not dead, not ie 11, not chrome < 51, not safari < 10"
+  ],
   "dependencies": {
+    "browserslist": "^4.16.6",
     "mapbox-gl": "^2.2.0"
   }
 }

@@ -12,9 +12,7 @@ module.exports = function (defaults) {
 			// enable "loose" mode
 			loose: true,
 			// don't transpile generator functions
-			// exclude: [
-			// 	''
-			// ],
+			// exclude: ['./node_mudules/mapbox-gl'],
 			// plugins: [
 			// 	require.resolve('transform-object-rest-spread')
 			// ]
