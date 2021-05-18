@@ -18,7 +18,7 @@ module.exports = function (defaults) {
 			// ]
 		},
 		autoImport: {
-			exclude: ['./node_modules/mapbox-gl/dist/mapbox-gl.js'],
+			exclude: [],
 			skipBabel: [
 				{
 					// when an already-babel-transpiled package like "mapbox-gl" is
