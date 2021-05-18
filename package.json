@@ -76,6 +76,6 @@
     "edition": "octane"
   },
   "dependencies": {
-    
+    "ember-webpack-loaders": "^0.2.0"
   }
 }

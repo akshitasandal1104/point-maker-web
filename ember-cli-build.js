@@ -17,6 +17,18 @@ module.exports = function (defaults) {
 			// 	require.resolve('transform-object-rest-spread')
 			// ]
 		},
+		autoImport: {
+			exclude: ['./node_modules/mapbox-gl/dist/mapbox-gl.js'],
+			skipBabel: [
+				{
+					// when an already-babel-transpiled package like "mapbox-gl" is
+					// not skipped, it can produce errors in the production mode
+					// due to double transpilation
+					package: 'mapbox-gl',
+					semverRange: '*',
+				},
+			],
+		},
 	});
 
 	// Use `app.import` to add additional libraries to the generated
