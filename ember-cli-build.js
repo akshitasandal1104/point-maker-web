@@ -8,15 +8,6 @@ module.exports = function (defaults) {
 			bootstrapVersion: 4,
 			importBootstrapCSS: false
 		},
-		babel: {
-			// enable "loose" mode
-			loose: true,
-			// don't transpile generator functions
-			// exclude: ['./node_mudules/mapbox-gl'],
-			// plugins: [
-			// 	require.resolve('transform-object-rest-spread')
-			// ]
-		},
 		autoImport: {
 			exclude: [],
 			skipBabel: [
